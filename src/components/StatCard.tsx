@@ -36,7 +36,7 @@ const StatCard: React.FC<StatCardProps> = ({
       }`}
     >
       {parseFloat(change) >= 0 ? "▲" : "▼"} {Math.abs(parseFloat(change))}%
-      <span className="text-gray-500 ml-1">vs {period}</span>
+      <span className="text-gray-500 ml-1"> {period}</span>
     </div>
   </div>
 );
