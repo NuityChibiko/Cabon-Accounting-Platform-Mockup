@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import MainDashboard from "./pages/MainDashboard";
 import Scope1DetailsPage from "./pages/Scope1DetailsPage";
 import Scope2DetailsPage from "./pages/Scope2DetailsPage";

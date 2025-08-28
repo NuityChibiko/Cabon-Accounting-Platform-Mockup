@@ -92,7 +92,7 @@ const Scope2DetailsPage: React.FC<Scope2DetailsPageProps> = ({
               labelLine={false}
               label={renderCustomizedLabel}
             >
-              {yearData.categories.map((entry, index) => (
+              {yearData.categories.map((index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

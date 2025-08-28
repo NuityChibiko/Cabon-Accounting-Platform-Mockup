@@ -277,7 +277,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 dataKey="value"
                 label={renderCustomizedLabel}
               >
-                {pieData.map((entry, index) => (
+                {pieData.map((index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -344,7 +344,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 formatter={(value: number) => `${value.toLocaleString()} tCO2e`}
               />
               <Bar dataKey="value" name="Emissions (tCO2e)" fill="#8884d8">
-                {topSourcesData.map((entry, index) => (
+                {topSourcesData.map((index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
