@@ -44,7 +44,6 @@ const Scope1DetailsPage: React.FC<Scope1DetailsPageProps> = ({
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = (props: PieLabelRenderProps) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
-
     if (
       cx === undefined ||
       cy === undefined ||
@@ -52,10 +51,8 @@ const Scope1DetailsPage: React.FC<Scope1DetailsPageProps> = ({
       innerRadius === undefined ||
       outerRadius === undefined ||
       percent === undefined
-    ) {
+    )
       return null;
-    }
-
     const numInnerRadius = Number(innerRadius);
     const numOuterRadius = Number(outerRadius);
     const radius = numInnerRadius + (numOuterRadius - numInnerRadius) * 0.6;
@@ -95,7 +92,7 @@ const Scope1DetailsPage: React.FC<Scope1DetailsPageProps> = ({
               labelLine={false}
               label={renderCustomizedLabel}
             >
-              {yearData.categories.map((index) => (
+              {yearData.categories.map((_entry, index: number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

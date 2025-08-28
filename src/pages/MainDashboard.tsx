@@ -220,7 +220,6 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 label={{
                   value: "GHG (ton CO2eq)",
                   angle: -90,
-                  dx: -30,
                   position: "insideLeft",
                   style: {
                     textAnchor: "middle",
@@ -277,7 +276,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 dataKey="value"
                 label={renderCustomizedLabel}
               >
-                {pieData.map((index) => (
+                {pieData.map((_entry, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -344,7 +343,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 formatter={(value: number) => `${value.toLocaleString()} tCO2e`}
               />
               <Bar dataKey="value" name="Emissions (tCO2e)" fill="#8884d8">
-                {topSourcesData.map((index) => (
+                {topSourcesData.map((_entry, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
