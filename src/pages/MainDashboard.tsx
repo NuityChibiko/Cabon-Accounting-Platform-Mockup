@@ -221,6 +221,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                   value: "GHG (ton CO2eq)",
                   angle: -90,
                   position: "insideLeft",
+                  offset: -20,
                   style: {
                     textAnchor: "middle",
                     fontSize: "14px",
@@ -329,7 +330,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                   offset: -100,
                   style: {
                     textAnchor: "middle",
-                    fontSize: "14px",
+                    fontSize: "16px",
                     fill: "#666",
                   },
                 }}
