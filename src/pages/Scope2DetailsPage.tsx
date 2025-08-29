@@ -223,7 +223,6 @@ const Scope2DetailsPage: React.FC<Scope2DetailsPageProps> = ({
             align="right"
           />
           <Bar dataKey="ไฟฟ้าจากกริด" stackId="a" fill={COLORS[0]} />
-          <Bar dataKey="พลังงานหมุนเวียน" stackId="a" fill={COLORS[1]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

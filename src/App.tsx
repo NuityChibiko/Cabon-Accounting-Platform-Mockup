@@ -36,7 +36,7 @@ export default function App() {
 
   return (
     <div className="bg-gray-50 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">{renderPage()}</div>
+      <div className="max-w-[90rem] mx-auto">{renderPage()}</div>
     </div>
   );
 }

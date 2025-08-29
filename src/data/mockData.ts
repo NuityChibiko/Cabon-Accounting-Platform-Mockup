@@ -358,54 +358,38 @@ export const scope1MonthlyDetailsData = {
 export const scope2DetailsData = {
   "2025": {
     total: 16800,
-    categories: [
-      { name: "ไฟฟ้าจากกริด", value: 16800 * 0.9 },
-      { name: "พลังงานหมุนเวียน", value: 16800 * 0.1 },
-    ],
+    categories: [{ name: "ไฟฟ้าจากกริด", value: 16800 }],
   },
   "2024": {
     total: 24349,
-    categories: [
-      { name: "ไฟฟ้าจากกริด", value: 24349 * 0.92 },
-      { name: "พลังงานหมุนเวียน", value: 24349 * 0.08 },
-    ],
+    categories: [{ name: "ไฟฟ้าจากกริด", value: 24349 }],
   },
   "2023": {
     total: 28310,
-    categories: [
-      { name: "ไฟฟ้าจากกริด", value: 28310 * 0.95 },
-      { name: "พลังงานหมุนเวียน", value: 28310 * 0.05 },
-    ],
+    categories: [{ name: "ไฟฟ้าจากกริด", value: 28310 }],
   },
   "2022": {
     total: 38753,
-    categories: [
-      { name: "ไฟฟ้าจากกริด", value: 38753 * 0.98 },
-      { name: "พลังงานหมุนเวียน", value: 38753 * 0.02 },
-    ],
+    categories: [{ name: "ไฟฟ้าจากกริด", value: 38753 }],
   },
 };
 
 export const scope2MonthlyDetailsData = {
   "2025": monthlyData2025.map((month) => ({
     name: month.name,
-    ไฟฟ้าจากกริด: month.scope2 * 0.9,
-    พลังงานหมุนเวียน: month.scope2 * 0.1,
+    ไฟฟ้าจากกริด: month.scope2,
   })),
   "2024": monthlyData2024.map((month) => ({
     name: month.name,
-    ไฟฟ้าจากกริด: month.scope2 * 0.92,
-    พลังงานหมุนเวียน: month.scope2 * 0.08,
+    ไฟฟ้าจากกริด: month.scope2,
   })),
   "2023": monthlyData2024.map((month) => ({
     name: month.name,
-    ไฟฟ้าจากกริด: month.scope2 * 1.2 * 0.95,
-    พลังงานหมุนเวียน: month.scope2 * 1.2 * 0.05,
+    ไฟฟ้าจากกริด: month.scope2,
   })),
   "2022": monthlyData2024.map((month) => ({
     name: month.name,
-    ไฟฟ้าจากกริด: month.scope2 * 1.5 * 0.98,
-    พลังงานหมุนเวียน: month.scope2 * 1.5 * 0.02,
+    ไฟฟ้าจากกริด: month.scope2,
   })),
 };
 

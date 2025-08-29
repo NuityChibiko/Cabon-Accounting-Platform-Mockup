@@ -6,8 +6,6 @@ interface StatCardProps {
   unit: string;
   change: string;
   period: string;
-  onClick?: () => void;
-  clickable?: boolean;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -16,20 +14,15 @@ const StatCard: React.FC<StatCardProps> = ({
   unit,
   change,
   period,
-  onClick,
-  clickable,
 }) => (
-  <div
-    className={`bg-white p-6 rounded-xl shadow-md transition-transform ${
-      clickable ? "cursor-pointer hover:scale-105" : ""
-    }`}
-    onClick={onClick}
-  >
-    <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-    <p className="mt-2 text-3xl font-bold text-gray-900">
-      {value.toLocaleString()}
-    </p>
-    <p className="text-sm text-gray-600">{unit}</p>
+  <div className={`h-full flex flex-col justify-between`}>
+    <div>
+      <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+      <p className="mt-2 text-3xl font-bold text-gray-900">
+        {value.toLocaleString()}
+      </p>
+      <p className="text-sm text-gray-600">{unit}</p>
+    </div>
     <div
       className={`mt-2 flex items-center text-sm ${
         parseFloat(change) >= 0 ? "text-red-500" : "text-green-500"

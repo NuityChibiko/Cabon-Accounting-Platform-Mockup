@@ -17,11 +17,15 @@ import {
 import type { PieLabelRenderProps } from "recharts";
 import StatCard from "../components/StatCard";
 import DashboardHeader from "../components/DashboardHeader";
+import TopSourcesDisplay from "../components/TopSourcesDisplay";
 import {
   monthlyData2025,
   monthlyData2024,
   annualData,
   COLORS,
+  scope1DetailsData,
+  scope2DetailsData,
+  scope3DetailsData,
 } from "../data/mockData";
 
 interface MainDashboardProps {
@@ -54,22 +58,44 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
   useEffect(() => {
     if (currentYearData) {
       setPieData([
-        { name: "Scope 1", value: currentYearData.scope1 },
-        { name: "Scope 2", value: currentYearData.scope2 },
-        { name: "Scope 3", value: currentYearData.scope3 },
+        { name: "SCOPE 1", value: currentYearData.scope1 },
+        { name: "SCOPE 2", value: currentYearData.scope2 },
+        { name: "SCOPE 3", value: currentYearData.scope3 },
       ]);
-      setTopSourcesData(
-        [
-          { name: `การจัดซื้อฯ (S3)`, value: currentYearData.scope3 * 0.6 },
-          { name: `การเดินทาง (S3)`, value: currentYearData.scope3 * 0.4 },
-          { name: `การใช้ไฟฟ้า (S2)`, value: currentYearData.scope2 },
-          { name: `การใช้ยานพาหนะ (S1)`, value: currentYearData.scope1 * 0.6 },
-          {
-            name: `การใช้เชื้อเพลิง (S1)`,
-            value: currentYearData.scope1 * 0.4,
-          },
-        ].sort((a, b) => b.value - a.value)
-      );
+
+      const s1Data =
+        scope1DetailsData[selectedYear as keyof typeof scope1DetailsData];
+      const s2Data =
+        scope2DetailsData[selectedYear as keyof typeof scope2DetailsData];
+      const s3Data =
+        scope3DetailsData[selectedYear as keyof typeof scope3DetailsData];
+
+      const allSources: { name: string; value: number }[] = [];
+
+      if (s1Data) {
+        s1Data.breakdown.forEach((item) => {
+          allSources.push({
+            name: `${item.item} (S1)`,
+            value: item.value,
+          });
+        });
+      }
+      if (s2Data) {
+        s2Data.categories.forEach((item) => {
+          allSources.push({ name: `${item.name} (S2)`, value: item.value });
+        });
+      }
+      if (s3Data) {
+        s3Data.categories.forEach((item) => {
+          allSources.push({ name: `${item.name} (S3)`, value: item.value });
+        });
+      }
+
+      const newTopSources = allSources
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
+
+      setTopSourcesData(newTopSources);
     }
   }, [selectedYear, currentYearData]);
 
@@ -128,6 +154,16 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
     );
   };
 
+  const scope1TopSources = scope1DetailsData[
+    selectedYear as keyof typeof scope1DetailsData
+  ]?.categories.sort((a, b) => b.value - a.value);
+  const scope2TopSources = scope2DetailsData[
+    selectedYear as keyof typeof scope2DetailsData
+  ]?.categories.sort((a, b) => b.value - a.value);
+  const scope3TopSources = scope3DetailsData[
+    selectedYear as keyof typeof scope3DetailsData
+  ]?.categories.sort((a, b) => b.value - a.value);
+
   return (
     <>
       <DashboardHeader
@@ -138,51 +174,90 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          title={`Total Emissions (${parseInt(selectedYear) + 543})`}
-          value={currentYearData?.total || 0}
-          unit="tCO2e"
-          change={totalChange}
-          period={`vs ${parseInt(selectedYear) - 1 + 543}`}
-        />
-        <StatCard
-          title={`Scope 1 Emissions`}
-          value={currentYearData?.scope1 || 0}
-          unit="tCO2e"
-          change={scope1Change}
-          period={`vs ${parseInt(selectedYear) - 1 + 543}`}
-          clickable={true}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-4 rounded-xl shadow-md transition-transform ">
+          <StatCard
+            title={`Total Emissions (${parseInt(selectedYear) + 543})`}
+            value={currentYearData?.total || 0}
+            unit="tCO2e"
+            change={totalChange}
+            period={`vs ${parseInt(selectedYear) - 1 + 543}`}
+          />
+        </div>
+
+        <div
+          className="bg-white p-4 rounded-xl shadow-md transition-transform hover:scale-105 cursor-pointer flex justify-between items-start gap-2"
           onClick={() => {
             setPageYear(selectedYear);
             onNavigate("scope1");
           }}
-        />
-        <StatCard
-          title={`Scope 2 Emissions`}
-          value={currentYearData?.scope2 || 0}
-          unit="tCO2e"
-          change={scope2Change}
-          period={`vs ${parseInt(selectedYear) - 1 + 543}`}
-          clickable={true}
+        >
+          <StatCard
+            title={`SCOPE 1 Emissions`}
+            value={currentYearData?.scope1 || 0}
+            unit="tCO2e"
+            change={scope1Change}
+            period={`vs ${parseInt(selectedYear) - 1 + 543}`}
+          />
+          <div className="self-end">
+            {scope1TopSources && (
+              <TopSourcesDisplay
+                sources={scope1TopSources}
+                total={currentYearData?.scope1 || 0}
+              />
+            )}
+          </div>
+        </div>
+
+        <div
+          className="bg-white p-4 rounded-xl shadow-md transition-transform hover:scale-105 cursor-pointer flex justify-between items-start gap-2"
           onClick={() => {
             setPageYear(selectedYear);
             onNavigate("scope2");
           }}
-        />
-        <StatCard
-          title={`Scope 3 Emissions`}
-          value={currentYearData?.scope3 || 0}
-          unit="tCO2e"
-          change={scope3Change}
-          period={`vs ${parseInt(selectedYear) - 1 + 543}`}
-          clickable={true}
+        >
+          <StatCard
+            title={`SCOPE 2 Emissions`}
+            value={currentYearData?.scope2 || 0}
+            unit="tCO2e"
+            change={scope2Change}
+            period={`vs ${parseInt(selectedYear) - 1 + 543}`}
+          />
+          <div className="self-end">
+            {scope2TopSources && (
+              <TopSourcesDisplay
+                sources={scope2TopSources}
+                total={currentYearData?.scope2 || 0}
+              />
+            )}
+          </div>
+        </div>
+
+        <div
+          className="bg-white p-4 rounded-xl shadow-md transition-transform hover:scale-105 cursor-pointer flex justify-between items-start gap-2"
           onClick={() => {
             setPageYear(selectedYear);
             onNavigate("scope3");
           }}
-        />
+        >
+          <StatCard
+            title={`SCOPE 3 Emissions`}
+            value={currentYearData?.scope3 || 0}
+            unit="tCO2e"
+            change={scope3Change}
+            period={`vs ${parseInt(selectedYear) - 1 + 543}`}
+          />
+          <div className="self-end">
+            {scope3TopSources && (
+              <TopSourcesDisplay
+                sources={scope3TopSources}
+                total={currentYearData?.scope3 || 0}
+              />
+            )}
+          </div>
+        </div>
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
           <h3 className="font-semibold text-gray-800 mb-4">
@@ -221,7 +296,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                   value: "GHG (ton CO2eq)",
                   angle: -90,
                   position: "insideLeft",
-                  offset: -20,
+                  offset: -25,
                   style: {
                     textAnchor: "middle",
                     fontSize: "14px",
@@ -263,7 +338,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
         </div>
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="font-semibold text-gray-800 mb-4">
-            สัดส่วนการปล่อย GHG ตาม Scope ({parseInt(selectedYear) + 543})
+            สัดส่วนการปล่อย GHG ตาม SCOPE ({parseInt(selectedYear) + 543})
           </h3>
           <ResponsiveContainer width="100%" height={350}>
             <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
@@ -327,7 +402,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                   value: "แหล่งที่มา",
                   angle: -90,
                   position: "insideLeft",
-                  offset: -100,
+                  offset: -120,
                   style: {
                     textAnchor: "middle",
                     fontSize: "16px",
