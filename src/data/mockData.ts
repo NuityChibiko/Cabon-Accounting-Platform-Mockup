@@ -1,168 +1,83 @@
-export const monthlyData2025 = [
-  {
-    name: "Jan",
-    total: 22000,
-    scope1: 1000,
-    scope2: 1900,
-    scope3: 19100,
-    target: 24000,
-  },
-  {
-    name: "Feb",
-    total: 21500,
-    scope1: 950,
-    scope2: 1850,
-    scope3: 18700,
-    target: 24000,
-  },
-  {
-    name: "Mar",
-    total: 22800,
-    scope1: 1100,
-    scope2: 2000,
-    scope3: 19700,
-    target: 24000,
-  },
-  {
-    name: "Apr",
-    total: 22600,
-    scope1: 1050,
-    scope2: 2100,
-    scope3: 19450,
-    target: 24000,
-  },
-  {
-    name: "May",
-    total: 23400,
-    scope1: 1150,
-    scope2: 2150,
-    scope3: 20100,
-    target: 24000,
-  },
-  {
-    name: "Jun",
-    total: 24000,
-    scope1: 1200,
-    scope2: 2200,
-    scope3: 20600,
-    target: 24000,
-  },
-  {
-    name: "Jul",
-    total: 24200,
-    scope1: 1220,
-    scope2: 2300,
-    scope3: 20680,
-    target: 24000,
-  },
-  {
-    name: "Aug",
-    total: 23900,
-    scope1: 1180,
-    scope2: 2250,
-    scope3: 20470,
-    target: 24000,
-  },
+// --- NEW: Define a clear structure for monthly data ---
+interface BaseMonthlyData {
+  name: string;
+  total: number;
+  scope1: number;
+  scope2: number;
+  scope3: number;
+}
+
+// --- NEW: Define a clear structure for detailed scope data ---
+interface ScopeDetailCategory {
+  name: string;
+  value: number;
+}
+
+interface Scope1BreakdownItem {
+  category: string;
+  item: string;
+  value: number;
+}
+
+interface ScopeDetail {
+  total: number;
+  categories: ScopeDetailCategory[];
+  breakdown?: Scope1BreakdownItem[]; // Optional for Scope 2 & 3
+}
+
+interface AllScopeDetailsData {
+  [key: string]: ScopeDetail;
+}
+
+// --- Helper function to generate descending targets ---
+const generateMonthlyTargets = (
+  data: BaseMonthlyData[],
+  startTarget: number,
+  endTarget: number
+) => {
+  const monthlyReduction = (startTarget - endTarget) / 11;
+  return data.map((month, index) => ({
+    ...month,
+    target: Math.round(startTarget - monthlyReduction * index),
+  }));
+};
+
+const baseMonthlyData2025: BaseMonthlyData[] = [
+  { name: "Jan", total: 22000, scope1: 1000, scope2: 1900, scope3: 19100 },
+  { name: "Feb", total: 21500, scope1: 950, scope2: 1850, scope3: 18700 },
+  { name: "Mar", total: 22800, scope1: 1100, scope2: 2000, scope3: 19700 },
+  { name: "Apr", total: 22600, scope1: 1050, scope2: 2100, scope3: 19450 },
+  { name: "May", total: 23400, scope1: 1150, scope2: 2150, scope3: 20100 },
+  { name: "Jun", total: 24000, scope1: 1200, scope2: 2200, scope3: 20600 },
+  { name: "Jul", total: 24200, scope1: 1220, scope2: 2300, scope3: 20680 },
+  { name: "Aug", total: 23900, scope1: 1180, scope2: 2250, scope3: 20470 },
 ];
 
-export const monthlyData2024 = [
-  {
-    name: "Jan",
-    total: 23450,
-    scope1: 1100,
-    scope2: 2050,
-    scope3: 20300,
-    target: 25000,
-  },
-  {
-    name: "Feb",
-    total: 22980,
-    scope1: 1050,
-    scope2: 1980,
-    scope3: 19950,
-    target: 25000,
-  },
-  {
-    name: "Mar",
-    total: 24010,
-    scope1: 1200,
-    scope2: 2100,
-    scope3: 20710,
-    target: 25000,
-  },
-  {
-    name: "Apr",
-    total: 23880,
-    scope1: 1150,
-    scope2: 2200,
-    scope3: 20530,
-    target: 25000,
-  },
-  {
-    name: "May",
-    total: 24550,
-    scope1: 1250,
-    scope2: 2250,
-    scope3: 21050,
-    target: 25000,
-  },
-  {
-    name: "Jun",
-    total: 25100,
-    scope1: 1300,
-    scope2: 2300,
-    scope3: 21500,
-    target: 25000,
-  },
-  {
-    name: "Jul",
-    total: 25320,
-    scope1: 1320,
-    scope2: 2400,
-    scope3: 21600,
-    target: 25000,
-  },
-  {
-    name: "Aug",
-    total: 24800,
-    scope1: 1280,
-    scope2: 2350,
-    scope3: 21170,
-    target: 25000,
-  },
-  {
-    name: "Sep",
-    total: 24100,
-    scope1: 1210,
-    scope2: 2250,
-    scope3: 20640,
-    target: 25000,
-  },
-  {
-    name: "Oct",
-    total: 23900,
-    scope1: 1190,
-    scope2: 2150,
-    scope3: 20560,
-    target: 25000,
-  },
-  {
-    name: "Nov",
-    total: 23500,
-    scope1: 1150,
-    scope2: 2000,
-    scope3: 20350,
-    target: 25000,
-  },
-  {
-    name: "Dec",
-    total: 26423,
-    scope1: 1400,
-    scope2: 2500,
-    scope3: 22523,
-    target: 25000,
-  },
+const baseMonthlyData2024: BaseMonthlyData[] = [
+  { name: "Jan", total: 23450, scope1: 1100, scope2: 2050, scope3: 20300 },
+  { name: "Feb", total: 22980, scope1: 1050, scope2: 1980, scope3: 19950 },
+  { name: "Mar", total: 24010, scope1: 1200, scope2: 2100, scope3: 20710 },
+  { name: "Apr", total: 23880, scope1: 1150, scope2: 2200, scope3: 20530 },
+  { name: "May", total: 24550, scope1: 1250, scope2: 2250, scope3: 21050 },
+  { name: "Jun", total: 25100, scope1: 1300, scope2: 2300, scope3: 21500 },
+  { name: "Jul", total: 25320, scope1: 1320, scope2: 2400, scope3: 21600 },
+  { name: "Aug", total: 24800, scope1: 1280, scope2: 2350, scope3: 21170 },
+  { name: "Sep", total: 24100, scope1: 1210, scope2: 2250, scope3: 20640 },
+  { name: "Oct", total: 23900, scope1: 1190, scope2: 2150, scope3: 20560 },
+  { name: "Nov", total: 23500, scope1: 1150, scope2: 2000, scope3: 20350 },
+  { name: "Dec", total: 26423, scope1: 1400, scope2: 2500, scope3: 22523 },
 ];
+
+export const monthlyData2025 = generateMonthlyTargets(
+  baseMonthlyData2025,
+  24000,
+  21000
+);
+export const monthlyData2024 = generateMonthlyTargets(
+  baseMonthlyData2024,
+  25000,
+  23000
+);
 
 export const annualData = [
   {
@@ -200,7 +115,7 @@ export const annualData = [
 ];
 
 // --- Scope 1 Details Data ---
-export const scope1DetailsData = {
+export const scope1DetailsData: AllScopeDetailsData = {
   "2025": {
     total: 9250,
     categories: [
@@ -355,7 +270,7 @@ export const scope1MonthlyDetailsData = {
 };
 
 // --- Scope 2 Details Data ---
-export const scope2DetailsData = {
+export const scope2DetailsData: AllScopeDetailsData = {
   "2025": {
     total: 16800,
     categories: [{ name: "ไฟฟ้าจากกริด", value: 16800 }],
@@ -393,8 +308,8 @@ export const scope2MonthlyDetailsData = {
   })),
 };
 
-// --- NEW: Scope 3 Details Data ---
-export const scope3DetailsData = {
+// --- Scope 3 Details Data ---
+export const scope3DetailsData: AllScopeDetailsData = {
   "2025": {
     total: 161750,
     categories: [

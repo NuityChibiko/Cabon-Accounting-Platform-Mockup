@@ -47,13 +47,70 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
     { name: string; value: number }[]
   >([]);
 
-  const monthlyData =
-    selectedYear === "2025" ? monthlyData2025 : monthlyData2024;
-  const trendData = timeRange === "monthly" ? monthlyData : annualData;
   const currentYearData = annualData.find((d) => d.name === selectedYear);
   const previousYearData = annualData.find(
     (d) => d.name === String(parseInt(selectedYear) - 1)
   );
+
+  // --- START: Chart Data Processing Logic ---
+  const getTrendData = () => {
+    // If user selects "annually", return the annual data directly.
+    if (timeRange === "annually") {
+      return annualData;
+    }
+
+    // --- Logic for processing MONTHLY data ---
+    const allMonths = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const currentMonthIndex = new Date("2025-09-22").getMonth();
+
+    const sourceMonthlyData =
+      selectedYear === "2025" ? monthlyData2025 : monthlyData2024;
+    const fullYearTargetData =
+      selectedYear === "2025"
+        ? [
+            ...monthlyData2025,
+            { name: "Sep", target: 22091 },
+            { name: "Oct", target: 21818 },
+            { name: "Nov", target: 21545 },
+            { name: "Dec", target: 21273 },
+          ]
+        : monthlyData2024;
+
+    // Create a new data array for all 12 months.
+    const monthlyChartData = allMonths.map((month, index) => {
+      const existingData = sourceMonthlyData.find((d) => d.name === month);
+      const targetDataPoint = fullYearTargetData.find((d) => d.name === month);
+      const isFutureMonthInCurrentYear =
+        selectedYear === "2025" && index > currentMonthIndex;
+
+      return {
+        name: month,
+        total:
+          existingData && !isFutureMonthInCurrentYear
+            ? existingData.total
+            : null,
+        target: targetDataPoint ? targetDataPoint.target : 0,
+      };
+    });
+
+    return monthlyChartData;
+  };
+
+  const trendData = getTrendData();
+  // --- END: Chart Data Processing Logic ---
 
   useEffect(() => {
     if (currentYearData) {
@@ -63,16 +120,14 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
         { name: "SCOPE 3", value: currentYearData.scope3 },
       ]);
 
-      const s1Data =
-        scope1DetailsData[selectedYear as keyof typeof scope1DetailsData];
-      const s2Data =
-        scope2DetailsData[selectedYear as keyof typeof scope2DetailsData];
-      const s3Data =
-        scope3DetailsData[selectedYear as keyof typeof scope3DetailsData];
+      const s1Data = scope1DetailsData[selectedYear];
+      const s2Data = scope2DetailsData[selectedYear];
+      const s3Data = scope3DetailsData[selectedYear];
 
       const allSources: { name: string; value: number }[] = [];
 
-      if (s1Data) {
+      // Corrected check for s1Data and its breakdown property
+      if (s1Data && s1Data.breakdown) {
         s1Data.breakdown.forEach((item) => {
           allSources.push({
             name: `${item.item} (S1)`,
@@ -154,15 +209,15 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
     );
   };
 
-  const scope1TopSources = scope1DetailsData[
-    selectedYear as keyof typeof scope1DetailsData
-  ]?.categories.sort((a, b) => b.value - a.value);
-  const scope2TopSources = scope2DetailsData[
-    selectedYear as keyof typeof scope2DetailsData
-  ]?.categories.sort((a, b) => b.value - a.value);
-  const scope3TopSources = scope3DetailsData[
-    selectedYear as keyof typeof scope3DetailsData
-  ]?.categories.sort((a, b) => b.value - a.value);
+  const scope1TopSources = scope1DetailsData[selectedYear]?.categories.sort(
+    (a, b) => b.value - a.value
+  );
+  const scope2TopSources = scope2DetailsData[selectedYear]?.categories.sort(
+    (a, b) => b.value - a.value
+  );
+  const scope3TopSources = scope3DetailsData[selectedYear]?.categories.sort(
+    (a, b) => b.value - a.value
+  );
 
   return (
     <>
@@ -324,6 +379,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
                 strokeWidth={2}
                 dot={{ r: 4 }}
                 activeDot={{ r: 6 }}
+                connectNulls={false} // This prop stops the line from connecting over null data points
               />
               <Line
                 type="monotone"
