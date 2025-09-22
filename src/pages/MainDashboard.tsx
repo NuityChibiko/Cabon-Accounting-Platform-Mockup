@@ -167,7 +167,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({
   return (
     <>
       <DashboardHeader
-        title="CFO Manager Dashboard"
+        title="ชื่อบริษัท"
         subtitle="สรุปภาพรวมการปล่อยก๊าซเรือนกระจกขององค์กร"
         timeRange={timeRange}
         setTimeRange={setTimeRange}
